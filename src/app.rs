@@ -44,7 +44,6 @@ impl ApplicationHandler<State> for App {
         let state = pollster::block_on(State::new(window)).unwrap();
         self.state = Some(state);
 
-        // 初回描画
         if let Some(state) = &mut self.state {
             state.window.request_redraw();
         }
