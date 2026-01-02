@@ -16,6 +16,7 @@ fn run() -> Result<()> {
     let mut root = test_layout_node();
     LayoutEngine::layout(&mut root, 800.0, 600.0);
     let v_and_i = parse_layout(&root, 0.0);
+    println!("{:?}", v_and_i);
     let mut app = App::new(v_and_i);
     event_loop.run_app(&mut app)?;
 
@@ -47,7 +48,7 @@ pub fn test_layout_node() -> LayoutNode {
     });
     let editor = LayoutNode::new(Style {
         display: Display::Block,
-        item_style: ItemStyle::default(),
+        item_style: ItemStyle { flex_grow: 1.0 },
         width: None,
         height: None,
         padding: 0.0,
@@ -70,7 +71,7 @@ pub fn test_layout_node() -> LayoutNode {
             display: Display::Flex {
                 flex_direction: ui_layout::FlexDirection::Column,
             },
-            item_style: ItemStyle { flex_grow: 0.0 },
+            item_style: ItemStyle::default(),
             width: None,
             height: None,
             padding: 0.0,
