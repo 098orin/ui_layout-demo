@@ -14,19 +14,19 @@ pub struct State {
 
     surface: wgpu::Surface<'static>,
     device: wgpu::Device,
+    queue: wgpu::Queue,
     config: wgpu::SurfaceConfiguration,
     render_pipeline: wgpu::RenderPipeline,
     vertex_buffer: Option<wgpu::Buffer>,
     index_buffer: Option<wgpu::Buffer>,
     num_indices: u32,
-    scale_factor: f64,
 }
 
 #[repr(C)]
 #[derive(Copy, Clone, Debug, bytemuck::Pod, bytemuck::Zeroable)]
-struct Vertex {
-    position: [f32; 3],
-    color: [f32; 3],
+pub struct Vertex {
+    pub position: [f32; 3],
+    pub color: [f32; 4],
 }
 
 impl Vertex {
@@ -43,17 +43,23 @@ impl Vertex {
                 wgpu::VertexAttribute {
                     offset: std::mem::size_of::<[f32; 3]>() as wgpu::BufferAddress,
                     shader_location: 1,
-                    format: wgpu::VertexFormat::Float32x3,
+                    format: wgpu::VertexFormat::Float32x4,
                 },
             ],
         }
     }
 }
 
+fn to_ndc(x: f32, y: f32, screen_width: f32, screen_height: f32) -> [f32; 3] {
+    [
+        (x / screen_width) * 2.0 - 1.0,
+        1.0 - (y / screen_height) * 2.0, // Y 反転
+        0.0,
+    ]
+}
+
 impl State {
     pub async fn new(window: Arc<Window>) -> Result<Self> {
-        let scale_factor = window.scale_factor();
-
         let instance = wgpu::Instance::new(&wgpu::InstanceDescriptor {
             backends: wgpu::Backends::PRIMARY,
             ..Default::default()
@@ -153,12 +159,12 @@ impl State {
             window,
             surface,
             device,
+            queue,
             config,
             render_pipeline,
             vertex_buffer: None,
             index_buffer: None,
             num_indices: 0,
-            scale_factor,
         })
     }
 
@@ -215,15 +221,23 @@ impl State {
             }
         }
 
+        self.queue.submit(std::iter::once(encoder.finish()));
+        output.present();
         self.window.request_redraw();
         Ok(())
     }
 
-    pub fn draw(&mut self, vertices: &[Vertex], indices: &[usize]) {
+    pub fn draw(&mut self, vertices: &[Vertex], indices: &[u16], screen_size: (f32, f32)) {
+        let mut vertex: Vec<Vertex> = Vec::new();
+        vertex.extend_from_slice(vertices);
+        vertex.iter_mut().for_each(|f| {
+            f.position = to_ndc(f.position[0], f.position[1], screen_size.0, screen_size.1)
+        });
+
         let device = &self.device;
         let vertex_buffer = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
             label: Some("Vertex Buffer"),
-            contents: bytemuck::cast_slice(vertices),
+            contents: bytemuck::cast_slice(&vertex),
             usage: wgpu::BufferUsages::VERTEX,
         });
         let index_buffer = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
@@ -240,11 +254,15 @@ impl State {
 
 pub struct App {
     state: Option<State>,
+    vertex_and_index: (Vec<Vertex>, Vec<u16>),
 }
 
 impl App {
-    pub fn new() -> Self {
-        Self { state: None }
+    pub fn new(vertex_and_index: (Vec<Vertex>, Vec<u16>)) -> Self {
+        Self {
+            state: None,
+            vertex_and_index,
+        }
     }
 }
 
@@ -278,7 +296,12 @@ impl ApplicationHandler<State> for App {
             WindowEvent::CloseRequested => event_loop.exit(),
             WindowEvent::Resized(size) => state.resize(size.width, size.height),
             WindowEvent::RedrawRequested => {
-                state.render();
+                state.draw(
+                    &self.vertex_and_index.0,
+                    &self.vertex_and_index.1,
+                    state.window.inner_size().into(),
+                );
+                let _ = state.render();
             }
             WindowEvent::KeyboardInput {
                 event:
