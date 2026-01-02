@@ -16,7 +16,6 @@ fn run() -> Result<()> {
     let mut root = test_layout_node();
     LayoutEngine::layout(&mut root, 800.0, 600.0);
     let v_and_i = parse_layout(&root, 0.0);
-    println!("{:?}", v_and_i);
     let mut app = App::new(v_and_i);
     event_loop.run_app(&mut app)?;
 
