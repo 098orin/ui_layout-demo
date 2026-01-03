@@ -18,6 +18,7 @@ pub struct State {
     queue: wgpu::Queue,
     config: wgpu::SurfaceConfiguration,
     render_pipeline: wgpu::RenderPipeline,
+    scale_factor: f64,
     vertex_buffer: Option<wgpu::Buffer>,
     index_buffer: Option<wgpu::Buffer>,
     num_indices: u32,
@@ -156,6 +157,8 @@ impl State {
             multiview_mask: None,
         });
 
+        let scale_factor = window.scale_factor();
+
         Ok(Self {
             window,
             surface,
@@ -163,6 +166,7 @@ impl State {
             queue,
             config,
             render_pipeline,
+            scale_factor,
             vertex_buffer: None,
             index_buffer: None,
             num_indices: 0,
@@ -231,10 +235,16 @@ impl State {
     }
 
     pub fn draw(&mut self, vertices: &[Vertex], indices: &[u16], screen_size: (f32, f32)) {
+        let sf = self.scale_factor as f32;
         let mut vertex: Vec<Vertex> = Vec::new();
         vertex.extend_from_slice(vertices);
         vertex.iter_mut().for_each(|f| {
-            f.position = to_ndc(f.position[0], f.position[1], screen_size.0, screen_size.1)
+            f.position = to_ndc(
+                f.position[0] * sf,
+                f.position[1] * sf,
+                screen_size.0,
+                screen_size.1,
+            )
         });
 
         let device = &self.device;
@@ -297,7 +307,8 @@ impl ApplicationHandler<State> for App {
             WindowEvent::Resized(size) => state.resize(size.width, size.height),
             WindowEvent::RedrawRequested => {
                 let screen_size: (f32, f32) = state.window.inner_size().into();
-                LayoutEngine::layout(&mut self.root, screen_size.0, screen_size.1);
+                let sf = state.scale_factor as f32;
+                LayoutEngine::layout(&mut self.root, screen_size.0 / sf, screen_size.1 / sf);
                 let (vertices, indices) = crate::parse_layout(&self.root, 0.0);
                 state.draw(&vertices, &indices, screen_size);
                 let _ = state.render();
