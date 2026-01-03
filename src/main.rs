@@ -1,7 +1,7 @@
 mod app;
 
 use anyhow::Result;
-use ui_layout::{Display, ItemStyle, LayoutNode, Rect, Style};
+use ui_layout::*;
 use winit::event_loop::EventLoop;
 
 use app::{App, Vertex};
@@ -21,61 +21,102 @@ fn run() -> Result<()> {
 }
 
 fn test_layout_node() -> LayoutNode {
+    // ── Toolbar ─────────────────────────────
     let toolbar = LayoutNode::new(Style {
         display: Display::Block,
-        item_style: ItemStyle::default(),
-        width: None,
-        height: Some(40.0),
-        padding: 0.0,
-    });
-    let status = LayoutNode::new(Style {
-        display: Display::Block,
-        item_style: ItemStyle::default(),
-        width: None,
-        height: Some(24.0),
-        padding: 0.0,
+        size: SizeStyle {
+            height: Some(40.0),
+            ..Default::default()
+        },
+        spacing: Spacing {
+            padding_left: 8.0,
+            padding_right: 8.0,
+            ..Default::default()
+        },
+        ..Default::default()
     });
 
+    // ── Status bar ──────────────────────────
+    let status = LayoutNode::new(Style {
+        display: Display::Block,
+        size: SizeStyle {
+            height: Some(24.0),
+            ..Default::default()
+        },
+        spacing: Spacing {
+            padding_left: 8.0,
+            padding_right: 8.0,
+            ..Default::default()
+        },
+        ..Default::default()
+    });
+
+    // ── Sidebar ─────────────────────────────
     let sidebar = LayoutNode::new(Style {
         display: Display::Block,
-        item_style: ItemStyle::default(),
-        width: Some(200.0),
-        height: None,
-        padding: 0.0,
+        size: SizeStyle {
+            width: Some(200.0),
+            min_width: Some(160.0),
+            max_width: Some(280.0),
+            ..Default::default()
+        },
+        spacing: Spacing {
+            margin_right: 8.0,
+            padding_top: 8.0,
+            padding_left: 8.0,
+            ..Default::default()
+        },
+        ..Default::default()
     });
+
+    // ── Editor (main flexible area) ─────────
     let editor = LayoutNode::new(Style {
         display: Display::Block,
-        item_style: ItemStyle { flex_grow: 1.0 },
-        width: None,
-        height: None,
-        padding: 0.0,
-    }); // grow
+        item_style: ItemStyle {
+            flex_grow: 1.0,
+            flex_basis: Some(300.0),
+            ..Default::default()
+        },
+        spacing: Spacing {
+            padding_top: 8.0,
+            padding_left: 8.0,
+            ..Default::default()
+        },
+        ..Default::default()
+    });
+
+    // ── Main area (Row flex) ─────────────────
     let main_area = LayoutNode::with_children(
         Style {
             display: Display::Flex {
-                flex_direction: ui_layout::FlexDirection::Row,
+                flex_direction: FlexDirection::Row,
             },
-            item_style: ItemStyle { flex_grow: 1.0 },
-            width: None,
-            height: None,
-            padding: 0.0,
+            item_style: ItemStyle {
+                flex_grow: 1.0,
+                ..Default::default()
+            },
+            spacing: Spacing {
+                padding_top: 4.0,
+                padding_bottom: 4.0,
+                padding_left: 4.0,
+                padding_right: 4.0,
+                ..Default::default()
+            },
+            ..Default::default()
         },
         vec![sidebar, editor],
     );
 
-    let root = LayoutNode::with_children(
+    // ── Root (Column flex) ──────────────────
+    LayoutNode::with_children(
         Style {
             display: Display::Flex {
-                flex_direction: ui_layout::FlexDirection::Column,
+                flex_direction: FlexDirection::Column,
             },
-            item_style: ItemStyle::default(),
-            width: None,
-            height: None,
-            padding: 0.0,
+            ..Default::default()
         },
         vec![toolbar, main_area, status],
-    );
-    root
+    )
 }
 
 pub fn parse_layout(root: &LayoutNode, hue: f32) -> (Vec<Vertex>, Vec<u16>) {
