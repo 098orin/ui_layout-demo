@@ -1,4 +1,5 @@
 mod app;
+mod demo;
 
 use anyhow::Result;
 use ui_layout::*;
@@ -13,117 +14,11 @@ fn main() -> Result<()> {
 fn run() -> Result<()> {
     env_logger::init();
     let event_loop = EventLoop::with_user_event().build()?;
-    let root = test_layout_node();
+    let root = demo::demo_layout_0_3();
     let mut app = App::new(root);
     event_loop.run_app(&mut app)?;
 
     Ok(())
-}
-
-fn test_layout_node() -> LayoutNode {
-    // ── Toolbar ─────────────────────────────
-    let toolbar = LayoutNode::new(Style {
-        display: Display::Block,
-        size: SizeStyle {
-            height: Some(40.0),
-            ..Default::default()
-        },
-        spacing: Spacing {
-            padding_left: 8.0,
-            padding_right: 8.0,
-            ..Default::default()
-        },
-        ..Default::default()
-    });
-
-    // ── Status bar ──────────────────────────
-    let status = LayoutNode::new(Style {
-        display: Display::Block,
-        size: SizeStyle {
-            height: Some(24.0),
-            ..Default::default()
-        },
-        spacing: Spacing {
-            padding_left: 8.0,
-            padding_right: 8.0,
-            ..Default::default()
-        },
-        ..Default::default()
-    });
-
-    // ── Sidebar ─────────────────────────────
-    let sidebar = LayoutNode::new(Style {
-        display: Display::Block,
-        size: SizeStyle {
-            width: Some(200.0),
-            min_width: Some(160.0),
-            max_width: Some(280.0),
-            ..Default::default()
-        },
-        spacing: Spacing {
-            padding_top: 8.0,
-            padding_left: 8.0,
-            ..Default::default()
-        },
-        ..Default::default()
-    });
-
-    // ── Editor (main flexible area) ─────────
-    let editor = LayoutNode::new(Style {
-        display: Display::Block,
-        item_style: ItemStyle {
-            flex_grow: 1.0,
-            flex_basis: Some(300.0),
-            ..Default::default()
-        },
-        spacing: Spacing {
-            padding_top: 8.0,
-            padding_left: 8.0,
-            ..Default::default()
-        },
-        ..Default::default()
-    });
-
-    // ── Main area (Row flex) ─────────────────
-    let main_area = LayoutNode::with_children(
-        Style {
-            display: Display::Flex {
-                flex_direction: FlexDirection::Row,
-            },
-            item_style: ItemStyle {
-                flex_grow: 1.0,
-                ..Default::default()
-            },
-            justify_content: JustifyContent::Start,
-            align_items: AlignItems::Stretch,
-            row_gap: 0.0,
-            column_gap: 8.0, // gap between [ sidebar / editor ]
-            spacing: Spacing {
-                padding_top: 4.0,
-                padding_bottom: 4.0,
-                padding_left: 4.0,
-                padding_right: 4.0,
-                ..Default::default()
-            },
-            ..Default::default()
-        },
-        vec![sidebar, editor],
-    );
-
-    // ── Root (Column flex) ──────────────────
-    LayoutNode::with_children(
-        Style {
-            display: Display::Flex {
-                flex_direction: FlexDirection::Column,
-            },
-            justify_content: JustifyContent::Start,
-            align_items: AlignItems::Stretch,
-            row_gap: 4.0, // gap between [ toolbar / main_area / status ]
-            column_gap: 0.0,
-            ..Default::default()
-        },
-        vec![toolbar, main_area, status],
-    )
 }
 
 pub fn parse_layout(root: &LayoutNode, hue: f32) -> (Vec<Vertex>, Vec<u16>) {
