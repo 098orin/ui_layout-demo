@@ -135,10 +135,7 @@ pub fn parse_layout(root: &LayoutNode, hue: f32) -> (Vec<Vertex>, Vec<u16>) {
         base_index: &mut u16,
         hue: f32,
     ) {
-        let mut color = hsl_to_rgb(hue % 1.0, 0.6, 0.6);
-        if hue == 0.0 {
-            color = [0.0, 0.0, 1.0, 1.0];
-        }
+        let color = hsl_to_rgb(hue % 1.0, 0.6, 0.6);
         let (v, i) = rect_to_vertices(fixed_pos, node.rect, color);
         verts.extend(v);
         // offsets index
