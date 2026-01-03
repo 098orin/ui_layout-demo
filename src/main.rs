@@ -1,7 +1,7 @@
 mod app;
 
 use anyhow::Result;
-use ui_layout::{Display, ItemStyle, LayoutEngine, LayoutNode, Rect, Style};
+use ui_layout::{Display, ItemStyle, LayoutNode, Rect, Style};
 use winit::event_loop::EventLoop;
 
 use app::{App, Vertex};
@@ -13,16 +13,14 @@ fn main() -> Result<()> {
 fn run() -> Result<()> {
     env_logger::init();
     let event_loop = EventLoop::with_user_event().build()?;
-    let mut root = test_layout_node();
-    LayoutEngine::layout(&mut root, 800.0, 600.0);
-    let v_and_i = parse_layout(&root, 0.0);
-    let mut app = App::new(v_and_i);
+    let root = test_layout_node();
+    let mut app = App::new(root);
     event_loop.run_app(&mut app)?;
 
     Ok(())
 }
 
-pub fn test_layout_node() -> LayoutNode {
+fn test_layout_node() -> LayoutNode {
     let toolbar = LayoutNode::new(Style {
         display: Display::Block,
         item_style: ItemStyle::default(),
@@ -80,7 +78,7 @@ pub fn test_layout_node() -> LayoutNode {
     root
 }
 
-fn parse_layout(root: &LayoutNode, hue: f32) -> (Vec<Vertex>, Vec<u16>) {
+pub fn parse_layout(root: &LayoutNode, hue: f32) -> (Vec<Vertex>, Vec<u16>) {
     fn collect(
         fixed_pos: (f32, f32),
         node: &LayoutNode,

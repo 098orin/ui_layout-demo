@@ -1,5 +1,6 @@
 use anyhow::Result;
 use std::sync::Arc;
+use ui_layout::{LayoutEngine, LayoutNode};
 use wgpu::util::DeviceExt;
 use winit::{
     application::ApplicationHandler,
@@ -172,6 +173,8 @@ impl State {
         if width > 0 && height > 0 {
             self.config.width = width;
             self.config.height = height;
+
+            self.surface.configure(&self.device, &self.config);
         }
     }
 
@@ -254,15 +257,12 @@ impl State {
 
 pub struct App {
     state: Option<State>,
-    vertex_and_index: (Vec<Vertex>, Vec<u16>),
+    root: LayoutNode,
 }
 
 impl App {
-    pub fn new(vertex_and_index: (Vec<Vertex>, Vec<u16>)) -> Self {
-        Self {
-            state: None,
-            vertex_and_index,
-        }
+    pub fn new(root: LayoutNode) -> Self {
+        Self { state: None, root }
     }
 }
 
@@ -296,11 +296,10 @@ impl ApplicationHandler<State> for App {
             WindowEvent::CloseRequested => event_loop.exit(),
             WindowEvent::Resized(size) => state.resize(size.width, size.height),
             WindowEvent::RedrawRequested => {
-                state.draw(
-                    &self.vertex_and_index.0,
-                    &self.vertex_and_index.1,
-                    state.window.inner_size().into(),
-                );
+                let screen_size: (f32, f32) = state.window.inner_size().into();
+                LayoutEngine::layout(&mut self.root, screen_size.0, screen_size.1);
+                let (vertices, indices) = crate::parse_layout(&self.root, 0.0);
+                state.draw(&vertices, &indices, screen_size);
                 let _ = state.render();
             }
             WindowEvent::KeyboardInput {
