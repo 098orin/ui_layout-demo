@@ -16,7 +16,6 @@ fn run() -> Result<()> {
     let mut root = test_layout_node();
     LayoutEngine::layout(&mut root, 800.0, 600.0);
     let v_and_i = parse_layout(&root, 0.0);
-    println!("{:?}", v_and_i);
     let mut app = App::new(v_and_i);
     event_loop.run_app(&mut app)?;
 
@@ -83,6 +82,7 @@ pub fn test_layout_node() -> LayoutNode {
 
 fn parse_layout(root: &LayoutNode, hue: f32) -> (Vec<Vertex>, Vec<u16>) {
     fn collect(
+        fixed_pos: (f32, f32),
         node: &LayoutNode,
         verts: &mut Vec<Vertex>,
         idxs: &mut Vec<u16>,
@@ -93,14 +93,17 @@ fn parse_layout(root: &LayoutNode, hue: f32) -> (Vec<Vertex>, Vec<u16>) {
         if hue == 0.0 {
             color = [0.0, 0.0, 1.0, 1.0];
         }
-        let (v, i) = rect_to_vertices(node.rect, color);
+        let (v, i) = rect_to_vertices(fixed_pos, node.rect, color);
         verts.extend(v);
         // offsets index
         idxs.extend(i.iter().map(|x| x + *base_index));
         *base_index += 4; // 4 vertces per 1 rect
 
+        let fixed_pos = (fixed_pos.0 + node.rect.x, fixed_pos.1 + node.rect.y);
+
         for (idx, child) in node.children.iter().enumerate() {
             collect(
+                fixed_pos,
                 child,
                 verts,
                 idxs,
@@ -113,13 +116,20 @@ fn parse_layout(root: &LayoutNode, hue: f32) -> (Vec<Vertex>, Vec<u16>) {
     let mut idxs = vec![];
     let mut base_index = 0;
 
-    collect(root, &mut verts, &mut idxs, &mut base_index, hue);
+    collect(
+        (0.0, 0.0),
+        root,
+        &mut verts,
+        &mut idxs,
+        &mut base_index,
+        hue,
+    );
     (verts, idxs)
 }
 
-fn rect_to_vertices(rect: Rect, color: [f32; 4]) -> (Vec<Vertex>, Vec<u16>) {
-    let x = rect.x;
-    let y = rect.y;
+fn rect_to_vertices(fixed_pos: (f32, f32), rect: Rect, color: [f32; 4]) -> (Vec<Vertex>, Vec<u16>) {
+    let x = rect.x + fixed_pos.0;
+    let y = rect.y + fixed_pos.1;
     let w = rect.width;
     let h = rect.height;
 
