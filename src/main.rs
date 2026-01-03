@@ -61,7 +61,6 @@ fn test_layout_node() -> LayoutNode {
             ..Default::default()
         },
         spacing: Spacing {
-            margin_right: 8.0,
             padding_top: 8.0,
             padding_left: 8.0,
             ..Default::default()
@@ -95,6 +94,10 @@ fn test_layout_node() -> LayoutNode {
                 flex_grow: 1.0,
                 ..Default::default()
             },
+            justify_content: JustifyContent::Start,
+            align_items: AlignItems::Stretch,
+            row_gap: 0.0,
+            column_gap: 8.0, // gap between [ sidebar / editor ]
             spacing: Spacing {
                 padding_top: 4.0,
                 padding_bottom: 4.0,
@@ -113,6 +116,10 @@ fn test_layout_node() -> LayoutNode {
             display: Display::Flex {
                 flex_direction: FlexDirection::Column,
             },
+            justify_content: JustifyContent::Start,
+            align_items: AlignItems::Stretch,
+            row_gap: 4.0, // gap between [ toolbar / main_area / status ]
+            column_gap: 0.0,
             ..Default::default()
         },
         vec![toolbar, main_area, status],
