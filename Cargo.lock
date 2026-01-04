@@ -1783,9 +1783,9 @@ checksum = "d2df906b07856748fa3f6e0ad0cbaa047052d4a7dd609e231c4f72cee8c36f31"
 
 [[package]]
 name = "ui_layout"
-version = "0.3.0"
+version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ce639933e2b168fed7aaacb4fb99b618caec467bb134e8bf5fba0da8b3bf552c"
+checksum = "5d4e62cb1671d9ff49c0089704949ce82b4dd8c85bd343e5cc67fafb3edc1051"
 
 [[package]]
 name = "unicode-ident"
