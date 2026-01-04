@@ -78,6 +78,21 @@ pub fn demo_layout_0_4() -> LayoutNode {
         })],
     );
 
+    // ── align-self ─────────────────────────
+    let align_self = LayoutNode::new(Style {
+        display: Display::Block,
+        item_style: ItemStyle {
+            align_self: Some(AlignItems::End),
+            ..Default::default()
+        },
+        size: SizeStyle {
+            width: Some(20.0),
+            height: Some(30.0),
+            ..Default::default()
+        },
+        ..Default::default()
+    });
+
     // ── Main content ───────────────────────
     let content_top = LayoutNode::new(Style {
         display: Display::Block,
@@ -97,7 +112,9 @@ pub fn demo_layout_0_4() -> LayoutNode {
 
     let content_bottom = LayoutNode::with_children(
         Style {
-            display: Display::Block,
+            display: Display::Flex {
+                flex_direction: FlexDirection::Column,
+            },
             item_style: ItemStyle {
                 flex_grow: 1.0,
                 flex_basis: Some(100.0),
@@ -114,9 +131,10 @@ pub fn demo_layout_0_4() -> LayoutNode {
                 min_height: Some(80.0),
                 ..Default::default()
             },
+            row_gap: 10.0,
             ..Default::default()
         },
-        vec![child_auto],
+        vec![child_auto, align_self],
     );
 
     let main_content = LayoutNode::with_children(
