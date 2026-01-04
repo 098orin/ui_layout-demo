@@ -43,8 +43,8 @@ pub fn demo_layout_0_4() -> LayoutNode {
             ..Default::default()
         },
         size: SizeStyle {
-            min_width: Some(150.0),
-            max_width: Some(300.0),
+            min_width: Some(100.0),
+            max_width: Some(200.0),
             ..Default::default()
         },
         spacing: Spacing {
@@ -157,7 +157,7 @@ pub fn demo_layout_0_4() -> LayoutNode {
                 ..Default::default()
             },
             item_style: ItemStyle {
-                flex_grow: 1.0,
+                flex_grow: 2.5,
                 ..Default::default()
             },
             ..Default::default()
