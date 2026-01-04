@@ -38,8 +38,11 @@ pub fn demo_layout_0_4() -> LayoutNode {
     // ── Sidebar ────────────────────────────
     let sidebar = LayoutNode::new(Style {
         display: Display::Block,
+        item_style: ItemStyle {
+            flex_grow: 1.0,
+            ..Default::default()
+        },
         size: SizeStyle {
-            width: Some(200.0),
             min_width: Some(150.0),
             max_width: Some(300.0),
             ..Default::default()
