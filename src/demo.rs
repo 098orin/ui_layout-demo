@@ -36,15 +36,36 @@ pub fn demo_layout_0_4() -> LayoutNode {
     });
 
     // ── Sidebar ────────────────────────────
-    let sidebar = LayoutNode::new(Style {
+    let left_sidebar = LayoutNode::new(Style {
         display: Display::Block,
         item_style: ItemStyle {
             flex_grow: 1.0,
             ..Default::default()
         },
         size: SizeStyle {
-            min_width: Some(100.0),
-            max_width: Some(200.0),
+            min_width: Some(50.0),
+            max_width: Some(100.0),
+            ..Default::default()
+        },
+        spacing: Spacing {
+            padding_top: 8.0,
+            padding_bottom: 8.0,
+            padding_left: 8.0,
+            padding_right: 8.0,
+            ..Default::default()
+        },
+        ..Default::default()
+    });
+
+    let right_sidebar = LayoutNode::new(Style {
+        display: Display::Block,
+        item_style: ItemStyle {
+            flex_grow: 2.0,
+            ..Default::default()
+        },
+        size: SizeStyle {
+            min_width: Some(70.0),
+            max_width: Some(120.0),
             ..Default::default()
         },
         spacing: Spacing {
@@ -157,7 +178,7 @@ pub fn demo_layout_0_4() -> LayoutNode {
                 ..Default::default()
             },
             item_style: ItemStyle {
-                flex_grow: 2.5,
+                flex_grow: 3.0,
                 ..Default::default()
             },
             ..Default::default()
@@ -188,7 +209,7 @@ pub fn demo_layout_0_4() -> LayoutNode {
             },
             ..Default::default()
         },
-        vec![sidebar, main_content],
+        vec![left_sidebar, main_content, right_sidebar],
     );
 
     // ── Root (Column flex) ─────────────────
