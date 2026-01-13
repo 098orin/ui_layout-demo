@@ -1,18 +1,18 @@
 use ui_layout::*;
 
-pub fn demo_layout_0_4() -> LayoutNode {
+pub fn demo_layout_0_6() -> LayoutNode {
     // ── Header ─────────────────────────────
     let header = LayoutNode::new(Style {
         display: Display::Block,
         size: SizeStyle {
-            height: Some(50.0),
+            height: Length::Px(50.0),
             ..Default::default()
         },
         spacing: Spacing {
-            padding_top: 8.0,
-            padding_bottom: 8.0,
-            padding_left: 16.0,
-            padding_right: 16.0,
+            padding_top: Length::Px(8.0),
+            padding_bottom: Length::Px(8.0),
+            padding_left: Length::Px(16.0),
+            padding_right: Length::Px(16.0),
             ..Default::default()
         },
         ..Default::default()
@@ -22,20 +22,20 @@ pub fn demo_layout_0_4() -> LayoutNode {
     let footer = LayoutNode::new(Style {
         display: Display::Block,
         size: SizeStyle {
-            height: Some(30.0),
+            height: Length::Px(30.0),
             ..Default::default()
         },
         spacing: Spacing {
-            padding_top: 4.0,
-            padding_bottom: 4.0,
-            padding_left: 16.0,
-            padding_right: 16.0,
+            padding_top: Length::Px(4.0),
+            padding_bottom: Length::Px(4.0),
+            padding_left: Length::Px(16.0),
+            padding_right: Length::Px(16.0),
             ..Default::default()
         },
         ..Default::default()
     });
 
-    // ── Sidebar ────────────────────────────
+    // ── Sidebars ───────────────────────────
     let left_sidebar = LayoutNode::new(Style {
         display: Display::Block,
         item_style: ItemStyle {
@@ -43,15 +43,15 @@ pub fn demo_layout_0_4() -> LayoutNode {
             ..Default::default()
         },
         size: SizeStyle {
-            min_width: Some(30.0),
-            max_width: Some(80.0),
+            min_width: Length::Px(30.0),
+            max_width: Length::Px(80.0),
             ..Default::default()
         },
         spacing: Spacing {
-            padding_top: 8.0,
-            padding_bottom: 8.0,
-            padding_left: 8.0,
-            padding_right: 8.0,
+            padding_top: Length::Px(8.0),
+            padding_bottom: Length::Px(8.0),
+            padding_left: Length::Px(8.0),
+            padding_right: Length::Px(8.0),
             ..Default::default()
         },
         ..Default::default()
@@ -64,14 +64,14 @@ pub fn demo_layout_0_4() -> LayoutNode {
             ..Default::default()
         },
         size: SizeStyle {
-            min_width: Some(70.0),
+            min_width: Length::Px(70.0),
             ..Default::default()
         },
         spacing: Spacing {
-            padding_top: 8.0,
-            padding_bottom: 8.0,
-            padding_left: 8.0,
-            padding_right: 8.0,
+            padding_top: Length::Px(8.0),
+            padding_bottom: Length::Px(8.0),
+            padding_left: Length::Px(8.0),
+            padding_right: Length::Px(8.0),
             ..Default::default()
         },
         ..Default::default()
@@ -82,10 +82,10 @@ pub fn demo_layout_0_4() -> LayoutNode {
         Style {
             display: Display::Block,
             spacing: Spacing {
-                padding_top: 12.0,
-                padding_bottom: 12.0,
-                padding_left: 12.0,
-                padding_right: 12.0,
+                padding_top: Length::Px(12.0),
+                padding_bottom: Length::Px(12.0),
+                padding_left: Length::Px(12.0),
+                padding_right: Length::Px(12.0),
                 ..Default::default()
             },
             ..Default::default()
@@ -93,15 +93,15 @@ pub fn demo_layout_0_4() -> LayoutNode {
         vec![LayoutNode::new(Style {
             display: Display::Block,
             size: SizeStyle {
-                min_width: Some(100.0),
-                min_height: Some(20.0),
+                min_width: Length::Px(100.0),
+                min_height: Length::Px(20.0),
                 ..Default::default()
             },
             ..Default::default()
         })],
     );
 
-    // ── align-self ─────────────────────────
+    // ── Align-self test ───────────────────
     let align_self = LayoutNode::new(Style {
         display: Display::Block,
         item_style: ItemStyle {
@@ -109,25 +109,25 @@ pub fn demo_layout_0_4() -> LayoutNode {
             ..Default::default()
         },
         size: SizeStyle {
-            width: Some(20.0),
-            height: Some(30.0),
+            width: Length::Px(20.0),
+            height: Length::Px(30.0),
             ..Default::default()
         },
         ..Default::default()
     });
 
-    // ── Main content ───────────────────────
+    // ── Main content ─────────────────────
     let content_top = LayoutNode::new(Style {
         display: Display::Block,
         size: SizeStyle {
-            height: Some(120.0),
+            height: Length::Px(120.0),
             ..Default::default()
         },
         spacing: Spacing {
-            padding_top: 8.0,
-            padding_bottom: 8.0,
-            padding_left: 8.0,
-            padding_right: 8.0,
+            padding_top: Length::Px(8.0),
+            padding_bottom: Length::Px(8.0),
+            padding_left: Length::Px(8.0),
+            padding_right: Length::Px(8.0),
             ..Default::default()
         },
         ..Default::default()
@@ -140,21 +140,21 @@ pub fn demo_layout_0_4() -> LayoutNode {
             },
             item_style: ItemStyle {
                 flex_grow: 1.0,
-                flex_basis: Some(100.0),
+                flex_basis: Length::Px(100.0),
                 ..Default::default()
             },
             spacing: Spacing {
-                padding_top: 8.0,
-                padding_bottom: 8.0,
-                padding_left: 8.0,
-                padding_right: 8.0,
+                padding_top: Length::Px(8.0),
+                padding_bottom: Length::Px(8.0),
+                padding_left: Length::Px(8.0),
+                padding_right: Length::Px(8.0),
                 ..Default::default()
             },
             size: SizeStyle {
-                min_height: Some(80.0),
+                min_height: Length::Px(80.0),
                 ..Default::default()
             },
-            row_gap: 10.0,
+            row_gap: Length::Px(10.0),
             ..Default::default()
         },
         vec![child_auto, align_self],
@@ -165,15 +165,14 @@ pub fn demo_layout_0_4() -> LayoutNode {
             display: Display::Flex {
                 flex_direction: FlexDirection::Column,
             },
-            row_gap: 8.0,
-            column_gap: 0.0,
+            row_gap: Length::Px(8.0),
             justify_content: JustifyContent::Start,
             align_items: AlignItems::Stretch,
             spacing: Spacing {
-                padding_top: 8.0,
-                padding_bottom: 8.0,
-                padding_left: 8.0,
-                padding_right: 8.0,
+                padding_top: Length::Px(8.0),
+                padding_bottom: Length::Px(8.0),
+                padding_left: Length::Px(8.0),
+                padding_right: Length::Px(8.0),
                 ..Default::default()
             },
             item_style: ItemStyle {
@@ -185,21 +184,20 @@ pub fn demo_layout_0_4() -> LayoutNode {
         vec![content_top, content_bottom],
     );
 
-    // ── Main area (Row flex) ───────────────
+    // ── Main area (Row flex) ─────────────
     let main_area = LayoutNode::with_children(
         Style {
             display: Display::Flex {
                 flex_direction: FlexDirection::Row,
             },
-            row_gap: 0.0,
-            column_gap: 12.0,
+            column_gap: Length::Px(12.0),
             justify_content: JustifyContent::Start,
             align_items: AlignItems::Stretch,
             spacing: Spacing {
-                padding_top: 8.0,
-                padding_bottom: 8.0,
-                padding_left: 8.0,
-                padding_right: 8.0,
+                padding_top: Length::Px(8.0),
+                padding_bottom: Length::Px(8.0),
+                padding_left: Length::Px(8.0),
+                padding_right: Length::Px(8.0),
                 ..Default::default()
             },
             item_style: ItemStyle {
@@ -211,25 +209,24 @@ pub fn demo_layout_0_4() -> LayoutNode {
         vec![left_sidebar, main_content, right_sidebar],
     );
 
-    // ── Root (Column flex) ─────────────────
+    // ── Root (Column flex) ───────────────
     LayoutNode::with_children(
         Style {
             display: Display::Flex {
                 flex_direction: FlexDirection::Column,
             },
-            row_gap: 12.0,
-            column_gap: 0.0,
+            row_gap: Length::Px(12.0),
             justify_content: JustifyContent::Start,
             align_items: AlignItems::Stretch,
             spacing: Spacing {
-                padding_top: 8.0,
-                padding_bottom: 8.0,
-                padding_left: 8.0,
-                padding_right: 8.0,
+                padding_top: Length::Px(8.0),
+                padding_bottom: Length::Px(8.0),
+                padding_left: Length::Px(8.0),
+                padding_right: Length::Px(8.0),
                 ..Default::default()
             },
             size: SizeStyle {
-                min_height: Some(400.0),
+                min_height: Length::Px(400.0),
                 ..Default::default()
             },
             ..Default::default()

@@ -14,7 +14,7 @@ fn main() -> Result<()> {
 fn run() -> Result<()> {
     env_logger::init();
     let event_loop = EventLoop::with_user_event().build()?;
-    let root = demo::demo_layout_0_4();
+    let root = demo::demo_layout_0_6();
     let mut app = App::new(root);
     event_loop.run_app(&mut app)?;
 
