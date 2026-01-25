@@ -116,6 +116,22 @@ pub fn demo_layout_0_6() -> LayoutNode {
         ..Default::default()
     });
 
+    // ── Margin auto ──────────────────────
+    let margin_auto = LayoutNode::new(Style {
+        display: Display::Block,
+        size: SizeStyle {
+            width: Length::Px(20.0),
+            height: Length::Px(30.0),
+            ..Default::default()
+        },
+        spacing: Spacing {
+            margin_left: Length::Auto,
+            margin_right: Length::Auto,
+            ..Default::default()
+        },
+        ..Default::default()
+    });
+
     // ── Main content ─────────────────────
     let content_top = LayoutNode::new(Style {
         display: Display::Block,
@@ -157,7 +173,7 @@ pub fn demo_layout_0_6() -> LayoutNode {
             row_gap: Length::Px(10.0),
             ..Default::default()
         },
-        vec![child_auto, align_self],
+        vec![child_auto, align_self, margin_auto],
     );
 
     let main_content = LayoutNode::with_children(

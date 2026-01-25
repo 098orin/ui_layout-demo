@@ -31,13 +31,17 @@ pub fn parse_layout(root: &LayoutNode, hue: f32) -> (Vec<Vertex>, Vec<u16>) {
         hue: f32,
     ) {
         let color = hsl_to_rgb(hue % 1.0, 0.6, 0.6);
-        let (v, i) = rect_to_vertices(fixed_pos, node.rect, color);
+
+        let (v, i) = rect_to_vertices(fixed_pos, node.box_model.padding_box, color);
         verts.extend(v);
         // offsets index
         idxs.extend(i.iter().map(|x| x + *base_index));
         *base_index += 4; // 4 vertces per 1 rect
 
-        let fixed_pos = (fixed_pos.0 + node.rect.x, fixed_pos.1 + node.rect.y);
+        let fixed_pos = (
+            fixed_pos.0 + node.box_model.content_box.x,
+            fixed_pos.1 + node.box_model.content_box.y,
+        );
 
         for (idx, child) in node.children.iter().enumerate() {
             collect(
