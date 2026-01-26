@@ -8,6 +8,6 @@ anyhow = "1.0.100"
 bytemuck = { version = "1.24.0", features = ["derive"] }
 env_logger = "0.11.8"
 pollster = "0.4.0"
-ui_layout = "0.8.0"
+ui_layout = "0.8.2"
 wgpu = "28.0.0"
 winit = "0.30.12"
