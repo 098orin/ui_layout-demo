@@ -32,26 +32,28 @@ pub fn parse_layout(root: &LayoutNode, hue: f32) -> (Vec<Vertex>, Vec<u16>) {
     ) {
         let color = hsl_to_rgb(hue % 1.0, 0.6, 0.6);
 
-        let (v, i) = rect_to_vertices(fixed_pos, node.box_model.padding_box, color);
-        verts.extend(v);
-        // offsets index
-        idxs.extend(i.iter().map(|x| x + *base_index));
-        *base_index += 4; // 4 vertces per 1 rect
+        if let LayoutBoxes::Single(box_model) = &node.layout_boxes {
+            let (v, i) = rect_to_vertices(fixed_pos, box_model.padding_box, color);
+            verts.extend(v);
+            // offsets index
+            idxs.extend(i.iter().map(|x| x + *base_index));
+            *base_index += 4; // 4 vertces per 1 rect
 
-        let fixed_pos = (
-            fixed_pos.0 + node.box_model.content_box.x,
-            fixed_pos.1 + node.box_model.content_box.y,
-        );
-
-        for (idx, child) in node.children.iter().enumerate() {
-            collect(
-                fixed_pos,
-                child,
-                verts,
-                idxs,
-                base_index,
-                hue + 0.1 * (idx as f32 + 1.0),
+            let fixed_pos = (
+                fixed_pos.0 + box_model.content_box.x,
+                fixed_pos.1 + box_model.content_box.y,
             );
+
+            for (idx, child) in node.children.iter().enumerate() {
+                collect(
+                    fixed_pos,
+                    child,
+                    verts,
+                    idxs,
+                    base_index,
+                    hue + 0.1 * (idx as f32 + 1.0),
+                );
+            }
         }
     }
     let mut verts = vec![];
