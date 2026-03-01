@@ -1,5 +1,50 @@
 use ui_layout::*;
 
+#[allow(dead_code)]
+pub fn block() -> LayoutNode {
+    let def_style = Style {
+        spacing: Spacing {
+            margin_top: Length::Px(10.0),
+            margin_bottom: Length::Px(10.0),
+            margin_left: Length::Px(10.0),
+            margin_right: Length::Px(10.0),
+            ..Default::default()
+        },
+        size: SizeStyle {
+            ..Default::default()
+        },
+        ..Default::default()
+    };
+    let mut root = LayoutNode::new(Style {
+        spacing: Spacing {
+            ..Default::default()
+        },
+        ..def_style.clone()
+    });
+
+    fn push_child(parent: &mut LayoutNode, style: Style, max: usize, current: usize) {
+        if current + 1 < max {
+            parent.children.push(LayoutNode::new(style.clone()));
+            push_child(&mut parent.children[0], style.clone(), max, current + 1);
+        } else {
+            parent.children.push(LayoutNode::new(Style {
+                size: SizeStyle {
+                    height: Length::Px(50.0),
+                    ..Default::default()
+                },
+                ..style
+            }));
+        }
+    }
+
+    for i in 0..10 {
+        root.children.push(LayoutNode::new(def_style.clone()));
+        push_child(&mut root.children[i], def_style.clone(), 5, 0);
+    }
+
+    root
+}
+
 pub fn demo_layout_0_6() -> LayoutNode {
     // ── Header ─────────────────────────────
     let header = LayoutNode::new(Style {
