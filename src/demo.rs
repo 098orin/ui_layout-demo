@@ -1,6 +1,34 @@
 use ui_layout::*;
 
 #[allow(dead_code)]
+pub fn inline() -> LayoutNode {
+    let fragment1 = ItemFragment::Fragment(Fragment {
+        width: 60.0,
+        height: 20.0,
+    });
+
+    let fragment2 = ItemFragment::Fragment(Fragment {
+        width: 70.0,
+        height: 25.0,
+    });
+
+    let fragment3 = ItemFragment::Fragment(Fragment {
+        width: 95.0,
+        height: 15.0,
+    });
+
+    let mut inline_node = LayoutNode::new(Style {
+        display: Display::Inline,
+        ..Default::default()
+    });
+    inline_node.set_fragments(vec![fragment1, fragment2, fragment3]);
+
+    let inner = LayoutNode::with_children(Style::default(), vec![inline_node]);
+
+    LayoutNode::with_children(Style::default(), vec![inner])
+}
+
+#[allow(dead_code)]
 pub fn block() -> LayoutNode {
     let def_style = Style {
         spacing: Spacing {
@@ -178,12 +206,9 @@ pub fn demo_layout_0_6() -> LayoutNode {
     });
 
     // ── Main content ─────────────────────
+
     let content_top = LayoutNode::new(Style {
         display: Display::Block,
-        size: SizeStyle {
-            height: Length::Px(120.0),
-            ..Default::default()
-        },
         spacing: Spacing {
             padding_top: Length::Px(8.0),
             padding_bottom: Length::Px(8.0),
