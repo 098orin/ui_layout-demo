@@ -631,19 +631,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "gui_test"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "bytemuck",
- "env_logger",
- "pollster",
- "ui_layout",
- "wgpu",
- "winit",
-]
-
-[[package]]
 name = "half"
 version = "2.7.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1785,6 +1772,19 @@ checksum = "d2df906b07856748fa3f6e0ad0cbaa047052d4a7dd609e231c4f72cee8c36f31"
 name = "ui_layout"
 version = "0.10.0"
 source = "git+https://github.com/098orin/ui_layout-rs?rev=84b7b91#84b7b9152d262ea162f0f02dacea5b05ca42ab9b"
+
+[[package]]
+name = "ui_layout_demo"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "bytemuck",
+ "env_logger",
+ "pollster",
+ "ui_layout",
+ "wgpu",
+ "winit",
+]
 
 [[package]]
 name = "unicode-ident"

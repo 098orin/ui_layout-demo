@@ -1,5 +1,5 @@
 use anyhow::Result;
 
 fn main() -> Result<()> {
-    gui_test::run_layout(gui_test::demo::simple_fixed_panel())
+    ui_layout_demo::run_layout(ui_layout_demo::demo::simple_fixed_panel())
 }
