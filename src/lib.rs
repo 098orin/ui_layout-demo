@@ -24,6 +24,7 @@ pub fn run_demo(name: &str) -> Result<()> {
 }
 
 pub fn parse_layout(root: &LayoutNode, hue: f32) -> (Vec<Vertex>, Vec<u16>) {
+    /// TODO: Implmant LineSpan.
     fn collect(
         fixed_pos: (f32, f32),
         node: &LayoutNode,
@@ -41,25 +42,32 @@ pub fn parse_layout(root: &LayoutNode, hue: f32) -> (Vec<Vertex>, Vec<u16>) {
             *base_index += 4;
         }
 
-        if let LayoutBox::BlockBox(box_model) = &node.layout_box {
-            let fixed_pos = (
-                fixed_pos.0 + box_model.content_box.x,
-                fixed_pos.1 + box_model.content_box.y,
-            );
+        if let Some((content_x, content_y)) = content_origin(&node.layout_box) {
+            let fixed_pos = (fixed_pos.0 + content_x, fixed_pos.1 + content_y);
 
             for (idx, child) in node.children.iter().enumerate() {
-                let Some(child) = child.node() else {
-                    continue;
-                };
+                let child_hue = hue + 0.1 * (idx as f32 + 1.0);
 
-                collect(
-                    fixed_pos,
-                    child,
-                    verts,
-                    idxs,
-                    base_index,
-                    hue + 0.1 * (idx as f32 + 1.0),
-                );
+                if let Some(child) = child.node() {
+                    collect(fixed_pos, child, verts, idxs, base_index, child_hue);
+                } else if let Some(fragment) = child.fragment()
+                    && let ItemFragment::Fragment(item) = fragment.node
+                {
+                    let rect = Rect {
+                        x: fragment.placement.offset.0,
+                        y: fragment.placement.offset.1,
+                        width: item.width,
+                        height: item.height,
+                    };
+                    let (v, i) = rect_to_vertices(
+                        fixed_pos,
+                        rect,
+                        hsl_to_rgb((child_hue + 0.05) % 1.0, 0.75, 0.7),
+                    );
+                    verts.extend(v);
+                    idxs.extend(i.iter().map(|x| x + *base_index));
+                    *base_index += 4;
+                }
             }
         }
     }
@@ -76,6 +84,17 @@ pub fn parse_layout(root: &LayoutNode, hue: f32) -> (Vec<Vertex>, Vec<u16>) {
         hue,
     );
     (verts, idxs)
+}
+
+fn content_origin(layout_box: &LayoutBox) -> Option<(f32, f32)> {
+    match layout_box {
+        LayoutBox::None => None,
+        LayoutBox::BlockBox(box_model) => Some((box_model.content_box.x, box_model.content_box.y)),
+        LayoutBox::InlineBox(inline_box) => Some((
+            inline_box.box_model.content_box.x,
+            inline_box.box_model.content_box.y,
+        )),
+    }
 }
 
 fn rect_to_vertices(fixed_pos: (f32, f32), rect: Rect, color: [f32; 4]) -> (Vec<Vertex>, Vec<u16>) {
