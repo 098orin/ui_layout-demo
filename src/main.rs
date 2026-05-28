@@ -32,19 +32,25 @@ pub fn parse_layout(root: &LayoutNode, hue: f32) -> (Vec<Vertex>, Vec<u16>) {
     ) {
         let color = hsl_to_rgb(hue % 1.0, 0.6, 0.6);
 
-        if let LayoutBoxes::Single(box_model) = &node.layout_boxes {
+        for box_model in node.layout_box.iter() {
             let (v, i) = rect_to_vertices(fixed_pos, box_model.padding_box, color);
             verts.extend(v);
             // offsets index
             idxs.extend(i.iter().map(|x| x + *base_index));
             *base_index += 4; // 4 vertces per 1 rect
+        }
 
+        if let LayoutBox::BlockBox(box_model) = &node.layout_box {
             let fixed_pos = (
                 fixed_pos.0 + box_model.content_box.x,
                 fixed_pos.1 + box_model.content_box.y,
             );
 
             for (idx, child) in node.children.iter().enumerate() {
+                let Some(child) = child.node() else {
+                    continue;
+                };
+
                 collect(
                     fixed_pos,
                     child,
