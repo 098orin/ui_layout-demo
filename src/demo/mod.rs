@@ -23,6 +23,16 @@ pub fn catalog() -> &'static [Demo] {
             build: demo_layout_0_6,
         },
         Demo {
+            name: "inline",
+            genre: "legacy",
+            build: inline,
+        },
+        Demo {
+            name: "block",
+            genre: "legacy",
+            build: block,
+        },
+        Demo {
             name: "simple_fixed_panel",
             genre: "simple",
             build: simple_fixed_panel,

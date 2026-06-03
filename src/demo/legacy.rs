@@ -21,7 +21,6 @@ fn block_flex() -> Display {
     }
 }
 
-#[allow(dead_code)]
 pub fn inline() -> LayoutNode {
     let fragment1 = ItemFragment::Fragment(Fragment {
         width: 60.0,
@@ -41,6 +40,7 @@ pub fn inline() -> LayoutNode {
     let inline_node = LayoutNode::with_children(
         Style {
             display: inline_flow(),
+            line_height: Length::Px(20.0),
             ..Default::default()
         },
         vec![fragment1, fragment2, fragment3],
@@ -51,7 +51,6 @@ pub fn inline() -> LayoutNode {
     LayoutNode::with_children(Style::default(), vec![inner])
 }
 
-#[allow(dead_code)]
 pub fn block() -> LayoutNode {
     let def_style = Style {
         spacing: Spacing {
