@@ -86,11 +86,13 @@ pub fn simple_inline_flow() -> LayoutNode {
                 padding_right: Length::Px(20.0),
                 ..Default::default()
             },
+            line_height: Length::Px(20.0),
             ..Default::default()
         },
         vec![LayoutNode::with_children(
             Style {
                 display: inline_flow(),
+                line_height: Length::Px(20.0),
                 ..Default::default()
             },
             fragments,
