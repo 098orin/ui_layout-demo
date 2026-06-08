@@ -1771,7 +1771,7 @@ checksum = "d2df906b07856748fa3f6e0ad0cbaa047052d4a7dd609e231c4f72cee8c36f31"
 [[package]]
 name = "ui_layout"
 version = "0.10.0"
-source = "git+https://github.com/098orin/ui_layout-rs?rev=b94de149e7e2afd84139853340bc7bf44eb0a38e#b94de149e7e2afd84139853340bc7bf44eb0a38e"
+source = "git+https://github.com/098orin/ui_layout-rs?rev=886b3086eaf4c0a71cff4644b6c3af26c0ddaa4f#886b3086eaf4c0a71cff4644b6c3af26c0ddaa4f"
 
 [[package]]
 name = "ui_layout_demo"
