@@ -159,7 +159,7 @@ fn hsl_to_rgb(h: f32, s: f32, l: f32) -> [f32; 4] {
         hue2rgb(p, q, h + 1.0 / 3.0),
         hue2rgb(p, q, h),
         hue2rgb(p, q, h - 1.0 / 3.0),
-        1.0,
+        0.7,
     ]
 }
 
